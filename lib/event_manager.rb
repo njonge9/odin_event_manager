@@ -69,6 +69,22 @@ contents = File.read('event_attendees.csv')
 # end
 
 # Displaying the zip codes of all attendees
+# contents = CSV.open(
+#   "event_attendees.csv",
+#   headers: true,
+#   header_converters: :symbol
+# )
+
+# contents.each do |row|
+#   first_name = row[:first_name]
+#   last_name = row[:last_name]
+#   full_name = "#{first_name} #{last_name}"
+#   zipcode = row[:zipcode]
+
+#   puts "#{full_name}: #{zipcode}"
+# end
+
+# Cleaning up our zip codes
 contents = CSV.open(
   "event_attendees.csv",
   headers: true,
@@ -80,7 +96,13 @@ contents.each do |row|
   last_name = row[:last_name]
   full_name = "#{first_name} #{last_name}"
   zipcode = row[:zipcode]
+  # p zipcode.length
+
+  if zipcode.length < 5
+    zipcode = zipcode.rjust(5,'0')
+  elsif zipcode.length > 5
+    zipcode = zipcode[0..4]
+  end
 
   puts "#{full_name}: #{zipcode}"
 end
-
