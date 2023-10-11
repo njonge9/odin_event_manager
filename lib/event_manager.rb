@@ -1,4 +1,5 @@
 require 'csv'
+require 'google/apis/civicinfo_v2'
 puts 'Event Manager Initialized!'
 
 # Read the file contents
@@ -85,7 +86,7 @@ contents = File.read('event_attendees.csv')
 # end
 
 # Moving clean zipcodes to a method
-def clean_zipcode(zipcode)
+# def clean_zipcode(zipcode)
    # Handle missing zip codes
   # if zipcode.nil?
   #   zipcode = '00000'
@@ -96,22 +97,56 @@ def clean_zipcode(zipcode)
   # else
   #   zipcode
   # end
-  zipcode.to_s.rjust(5,'0')[0..4]
-end
+  # zipcode.to_s.rjust(5,'0')[0..4]
+# end
 
 # Cleaning up our zip codes
+# contents = CSV.open(
+#   "event_attendees.csv",
+#   headers: true,
+#   header_converters: :symbol
+# )
+
+# contents.each do |row|
+#   first_name = row[:first_name]
+#   last_name = row[:last_name]
+#   full_name = "#{first_name} #{last_name}"
+#   zipcode = clean_zipcode(row[:zipcode])
+#   # p zipcode.length
+
+#   puts "#{full_name}: #{zipcode}"
+# end
+
+civic_info = Google::Apis::CivicinfoV2::CivicInfoService.new
+civic_info.key = 'AIzaSyClRzDqDh5MsXwnCWi0kOiiBivP6JsSyBw'
+
+def clean_zipcode(zipcode)
+  zipcode.to_s.rjust(5, '0')[0..4]
+end
+
+puts 'EventManager initialized.'
+
 contents = CSV.open(
-  "event_attendees.csv",
+  'event_attendees.csv',
   headers: true,
   header_converters: :symbol
 )
 
 contents.each do |row|
-  first_name = row[:first_name]
-  last_name = row[:last_name]
-  full_name = "#{first_name} #{last_name}"
-  zipcode = clean_zipcode(row[:zipcode])
-  # p zipcode.length
+  name = row[:first_name]
 
-  puts "#{full_name}: #{zipcode}"
+  zipcode = clean_zipcode(row[:zipcode])
+
+  begin
+    legislators = civic_info.representative_info_by_address(
+      address: zipcode,
+      levels: 'country',
+      roles: ['legislatorUpperBody', 'legislatorLowerBody']
+    )
+    legislators = legislators.officials
+  rescue
+    'You can find your representatives by visiting www.commoncause.org/take-action/find-elected-officials'
+  end
+
+  puts "#{name} #{zipcode} #{legislators}"
 end
