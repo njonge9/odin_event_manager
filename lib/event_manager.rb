@@ -1,3 +1,4 @@
+require 'csv'
 puts 'Event Manager Initialized!'
 
 # Read the file contents
@@ -48,6 +49,7 @@ contents = File.read('event_attendees.csv')
 #   puts name
 # end
 
+# Switching over to use the CSV library 
 contents = CSV.open('event_attendees.csv', headers: true)
 contents.each do |row|
   name = row[2]
