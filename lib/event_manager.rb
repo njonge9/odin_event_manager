@@ -6,7 +6,15 @@ contents = File.read('event_attendees.csv')
 # puts contents
 
 # Read the file line by line
+# lines = File.readlines('event_attendees.csv')
+# lines.each do |line|
+#   puts line
+# end
+
+# Display the first names of all attendees
 lines = File.readlines('event_attendees.csv')
 lines.each do |line|
-  puts line
+  columns = line.split(',')
+  name = columns[2]
+  puts name
 end
