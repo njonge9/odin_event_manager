@@ -84,6 +84,20 @@ contents = File.read('event_attendees.csv')
 #   puts "#{full_name}: #{zipcode}"
 # end
 
+# Moving clean zipcodes to a method
+def clean_zipcode(zipcode)
+   # Handle missing zip codes
+  if zipcode.nil?
+    zipcode = '00000'
+  elsif zipcode.length < 5
+    zipcode = zipcode.rjust(5,'0')
+  elsif zipcode.length > 5
+    zipcode = zipcode[0..4]
+  else
+    zipcode
+  end
+end
+
 # Cleaning up our zip codes
 contents = CSV.open(
   "event_attendees.csv",
@@ -95,16 +109,8 @@ contents.each do |row|
   first_name = row[:first_name]
   last_name = row[:last_name]
   full_name = "#{first_name} #{last_name}"
-  zipcode = row[:zipcode]
+  zipcode = clean_zipcode(row[:zipcode])
   # p zipcode.length
-  # Handle missing zip codes
-  if zipcode.nil?
-    zipcode = '00000'
-  elsif zipcode.length < 5
-    zipcode = zipcode.rjust(5,'0')
-  elsif zipcode.length > 5
-    zipcode = zipcode[0..4]
-  end
 
   puts "#{full_name}: #{zipcode}"
 end
