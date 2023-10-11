@@ -50,11 +50,11 @@ contents = File.read('event_attendees.csv')
 # end
 
 # Switching over to use the CSV library
-contents = CSV.open('event_attendees.csv', headers: true)
-contents.each do |row|
-  name = row[2]
-  puts name
-end
+# contents = CSV.open('event_attendees.csv', headers: true)
+# contents.each do |row|
+#   name = row[2]
+#   puts name
+# end
 
 # Accessing columns by their names
 contents = CSV.open(
@@ -64,6 +64,8 @@ contents = CSV.open(
 )
 
 contents.each do |row|
-  name = row[:email]
+  name = row[:email_address]
   puts name
 end
+
+
