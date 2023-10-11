@@ -57,15 +57,30 @@ contents = File.read('event_attendees.csv')
 # end
 
 # Accessing columns by their names
+# contents = CSV.open(
+#   'event_attendees.csv',
+#    headers: true,
+#    header_converters: :symbol
+# )
+
+# contents.each do |row|
+#   name = row[:email_address]
+#   puts name
+# end
+
+# Displaying the zip codes of all attendees
 contents = CSV.open(
-  'event_attendees.csv',
-   headers: true,
-   header_converters: :symbol
+  "event_attendees.csv",
+  headers: true,
+  header_converters: :symbol
 )
 
 contents.each do |row|
-  name = row[:email_address]
-  puts name
-end
+  first_name = row[:first_name]
+  last_name = row[:last_name]
+  full_name = "#{first_name} #{last_name}"
+  zipcode = row[:zipcode]
 
+  puts "#{full_name}: #{zipcode}"
+end
 
